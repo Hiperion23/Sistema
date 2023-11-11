@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $payments = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($payments);
+    exit;
 }
 
 // Update a payment

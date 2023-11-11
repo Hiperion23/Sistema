@@ -76,48 +76,69 @@
 <ul id="paymentList" class="list-group"></ul>
 
 <script>
-$(document).ready(function() {
-  $("#createPaymentForm").on("submit", function(event) {
-    event.preventDefault();
+function handleSuccess(response) {
+  alert("Payment Correct")
+  $("#paymentModal").modal("hide");
+  $("#createPaymentForm")[0].reset();
+}
 
-    const formData = new FormData(document.querySelector("#createPaymentForm"));
-    const paymentData = {};
+function handleFailure(response) {
+  if (response.status === 200){
+    alert("Payment Correct") //Esta linea no es necesario
+    $("#paymentModal").modal("hide");
+    $("#createPaymentForm")[0].reset();
+  }else{
+    alert("Error al crear el pago: "+ response.message);
+  }
+}
 
-    for (const pair of formData.entries()) {
-      paymentData[pair[0]] = pair[1];
-    }
+$("#createPaymentForm").on("submit", function(event) {
+  event.preventDefault();
 
-    $.ajax({
-      type: "POST",
-      url: "../Controllers/PaymentController.php",
-      data: JSON.stringify(paymentData),
-      dataType: "json",
-      contentType: "application/json",
-      success: function(response) {
-        console.log(response);
-        if (response.status !== 200) {
-          $("#paymentModal").modal("hide");
-          $("#createPaymentForm")[0].reset();
-          // Aquí puedes actualizar la lista de pagos si es necesario
-          // Puedes llamar a una función que recargue la lista de pagos
-          // desde tu base de datos y la muestre en la página.
-        } else {
-          alert("Error: " + (response.message || "Respuesta no válida del servidor."));
-        }
-      },
-      error: function(error) {
-        console.log(error);
-        alert("Error al crear el pago: " + error.statusText);
-      }
-    });
+  const formData = new FormData(document.querySelector("#createPaymentForm"));
+  const paymentData = {};
 
+  for (const pair of formData.entries()) {
+    paymentData[pair[0]] = pair[1];
+  }
+
+  $.ajax({
+    type: "POST",
+    url: "../Controllers/PaymentController.php",
+    data: JSON.stringify(paymentData),
+    dataType: "json",
+    contentType: "application/json",
+    success: handleSuccess,
+    error: handleFailure
   });
 
-  // Otros eventos y funciones aquí, como actualizar y eliminar pagos
 });
-$("#paymentModal").on("hidden.bs.modal", function() {
-  $("#createPaymentButton").prop("disabled", false);
+
+document.addEventListener("DOMContentLoaded", function() {
+  fetch("../Controllers/PaymentController.php")
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Listar los datos de la base de datos
+      var paymentList = document.getElementById("paymentList");
+
+      data.forEach(payment => {
+        var listItem = document.createElement("li");
+        listItem.className = "list-group-item";
+        listItem.textContent = `${payment.idPurchase} - ${payment.paymentAmount} - ${payment.paymentDate} - ${payment.status}`;
+        paymentList.appendChild(listItem);
+      });
+    })
+    .catch(error => {
+      console.error("Fetch error:", error);
+    });
 });
+
+
 </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
