@@ -2,7 +2,9 @@ import React from 'react'
 
 function Supplier() {
   return (
-    <div>Supplier</div>
+    <div>
+      <h3>hold</h3>
+      Supplier</div>
   )
 }
 
