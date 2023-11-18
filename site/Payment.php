@@ -115,14 +115,11 @@ $("#createPaymentForm").on("submit", function(event) {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-  fetch("../Controllers/PaymentController.php")
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
+  $.ajax({
+    type: "GET", // Utiliza el método GET para obtener datos
+    url: "../Controllers/PaymentController.php",
+    dataType: "json",
+    success: function(data) {
       // Listar los datos de la base de datos
       var paymentList = document.getElementById("paymentList");
 
@@ -132,11 +129,14 @@ document.addEventListener("DOMContentLoaded", function() {
         listItem.textContent = `${payment.idPurchase} - ${payment.paymentAmount} - ${payment.paymentDate} - ${payment.status}`;
         paymentList.appendChild(listItem);
       });
-    })
-    .catch(error => {
-      console.error("Fetch error:", error);
-    });
+    },
+    error: function(error) {
+      console.error("AJAX error:", error);
+    }
+  });
 });
+
+// Resto del código...
 
 
 </script>
