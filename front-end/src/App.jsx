@@ -12,7 +12,6 @@ function App() {
       <div>
         <Navbar/>
         <Routes>
-
          <Route path='/supplier' element={<Supplier/>}/>
          <Route path='/purchase' element={<Purchase/>}/>
          <Route path='/payment' element={<Payment/>}/>
