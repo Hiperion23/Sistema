@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 function Supplier() {
   const [showButton, setShowButton] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [suppliers, setSuppliers] = useState([]);
   const [supplierData, setSupplierData] = useState({
     idSupplier: '',
     name: '',
@@ -28,7 +29,7 @@ function Supplier() {
 
   const handleCreateSupplier = async () => {
     try {
-      const response = await fetch('http://localhost/sistema/Controllers/SupplierController.php', {
+      const response = await fetch('http://localhost/sistema/Controllers/SupplierController/Create.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,8 +40,52 @@ function Supplier() {
       if (response.ok) {
         console.log('Supplier created successfully');
         handleClose();
+        fetchSuppliers(); // Actualizar la lista de proveedores después de crear uno nuevo
       } else {
         console.error('Error creating supplier');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const fetchSuppliers = async () => {
+    try {
+      const response = await fetch('http://localhost/sistema/Controllers/SupplierController/Get.php');
+      console.log(response);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Conectado', data);
+        setSuppliers(data);
+      } else {
+        console.error('HTTP error! Status: ${response.status}')
+      }
+
+    } catch (error) {
+      console.error('Error fetching suppliers:', error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchSuppliers();
+  }, []); // Se ejecuta solo una vez al montar el componente
+
+  const handleUpdateSupplier = (id) => {
+    // Implementa la lógica para actualizar un proveedor
+    console.log('Update supplier with ID:', id);
+  };
+
+  const handleDeleteSupplier = async (id) => {
+    try {
+      const response = await fetch(`http://localhost/sistema/Controllers/SupplierController/Delete.php?id=${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        console.log('Supplier deleted successfully');
+        fetchSuppliers(); // Actualizar la lista después de eliminar un proveedor
+      } else {
+        console.error('Error deleting supplier');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -141,6 +186,48 @@ function Supplier() {
           </div>
         </div>
       )}
+
+      {/* Lista de proveedores */}
+      <div className="mt-8">
+        <h2 className="text-lg font-bold mb-4">Supplier List</h2>
+        <table className="min-w-full border border-gray-300">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 p-2">ID</th>
+              <th className="border border-gray-300 p-2">Name</th>
+              <th className="border border-gray-300 p-2">Address</th>
+              <th className="border border-gray-300 p-2">Phone</th>
+              <th className="border border-gray-300 p-2">Email</th>
+              <th className="border border-gray-300 p-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {suppliers.map((supplier) => (
+              <tr key={supplier.idSupplier}>
+                <td className="border border-gray-300 p-2">{supplier.idSupplier}</td>
+                <td className="border border-gray-300 p-2">{supplier.name}</td>
+                <td className="border border-gray-300 p-2">{supplier.address}</td>
+                <td className="border border-gray-300 p-2">{supplier.phone}</td>
+                <td className="border border-gray-300 p-2">{supplier.email}</td>
+                <td className="border border-gray-300 p-2">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 mr-2 rounded"
+                    onClick={() => handleUpdateSupplier(supplier.idSupplier)}
+                  >
+                    Update
+                  </button>
+                  <button
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                    onClick={() => handleDeleteSupplier(supplier.idSupplier)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 }
