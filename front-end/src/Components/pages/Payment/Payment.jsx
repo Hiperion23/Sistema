@@ -76,7 +76,7 @@ function Payment() {
 
   const handleDeletePayment = async (id) => {
     try {
-      const response = await fetch(`http://localhost/sistema/Controllers/PaymentController.php?id=${id}`, {
+      const response = await fetch(`http://localhost/sistema/Controllers/PaymentController.php?idPayment=${id}`, {
         method: 'DELETE',
       });
 
@@ -85,6 +85,7 @@ function Payment() {
         fetchPayments();
       } else {
         console.error('Error deleting Payment', response.statusText);
+        console.log(await response.text());
       }
     } catch (error) {
       console.error('Error:', error);

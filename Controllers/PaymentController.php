@@ -65,17 +65,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 
 // Delete a payment
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    $data = json_decode(file_get_contents("php://input"));
-    $idPayment = $data->idPayment;
+    // Obtener el idPayment de la URL
+    $idPayment = $_GET['idPayment'] ?? null;
 
-    $sql = "DELETE FROM payment WHERE idPayment = :idPayment";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(":idPayment", $idPayment);
+    // Verificar si el idPayment es válido
+    if ($idPayment !== null) {
+        $sql = "DELETE FROM payment WHERE idPayment = :idPayment";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(":idPayment", $idPayment);
 
-    if ($stmt->execute()) {
-        echo json_encode(["message" => "Payment deleted successfully"]);
+        if ($stmt->execute()) {
+            echo json_encode(["message" => "Payment deleted successfully"]);
+        } else {
+            echo json_encode(["message" => "Failed to delete payment"]);
+        }
     } else {
-        echo json_encode(["message" => "Failed to delete payment"]);
+        echo json_encode(["message" => "Invalid request. Missing idPayment parameter in the URL"]);
     }
 }
 ?>
