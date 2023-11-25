@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>System</title>
 </head>
 <body>
@@ -73,6 +74,68 @@
 <!-- Supplier List -->
 <h3 class="mt-4">Supplier List</h3>
 <ul id="supplierList" class="list-group"></ul>
+
+<script>
+function handleSuccess(response) {
+  alert("Supplier Correct")
+  $("#supplierModal").modal("hide");
+  $("#createSupplierForm")[0].reset();
+}
+
+function handleFailure(response) {
+  if (response.status === 200){
+    alert("Supplier Correct") 
+    $("#supplierModal").modal("hide");
+    $("#createSupplierForm")[0].reset();
+  }else{
+    alert("Error al crear el pago: "+ response.message);
+  }
+}
+
+$("#createSupplierForm").on("submit", function(event) {
+  event.preventDefault();
+
+  const formData = new FormData(document.querySelector("#createSupplierForm"));
+  const supplierData = {};
+
+  for (const pair of formData.entries()) {
+    supplierData[pair[0]] = pair[1];
+  }
+
+  $.ajax({
+    type: "POST",
+    url: "../Controllers/SupplierController.php",
+    data: JSON.stringify(supplierData),
+    dataType: "json",
+    contentType: "application/json",
+    success: handleSuccess,
+    error: handleFailure
+  });
+
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  $.ajax({
+    type: "GET", 
+    url: "../Controllers/SupplierController.php",
+    dataType: "json",
+    success: function(data) {
+      var supplierList = document.getElementById("supplierList");
+
+      data.forEach(supplier => {
+        var listItem = document.createElement("li");
+        listItem.className = "list-group-item";
+        listItem.textContent = `${supplier.idSupplier} - ${supplier.name} - ${supplier.address} - ${supplier.phone} - ${supplier.email}`;
+        supplierList.appendChild(listItem);
+      });
+    },
+    error: function(error) {
+      console.error("AJAX error:", error);
+    }
+  });
+});
+
+</script>
 
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>

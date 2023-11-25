@@ -116,17 +116,51 @@ $("#createPaymentForm").on("submit", function(event) {
 
 document.addEventListener("DOMContentLoaded", function() {
   $.ajax({
-    type: "GET", // Utiliza el método GET para obtener datos
+    type: "GET", 
     url: "../Controllers/PaymentController.php",
     dataType: "json",
     success: function(data) {
-      // Listar los datos de la base de datos
       var paymentList = document.getElementById("paymentList");
 
       data.forEach(payment => {
         var listItem = document.createElement("li");
         listItem.className = "list-group-item";
         listItem.textContent = `${payment.idPurchase} - ${payment.paymentAmount} - ${payment.paymentDate} - ${payment.status}`;
+        var editButton = document.createElement("button");
+      editButton.textContent = "Editar";
+      editButton.className = "btn btn-warning btn-sm float-end mx-1";
+      editButton.addEventListener("click", function() {
+      // Cargar datos en el formulario de creación para la edición
+      $("#idPurchase").val(payment.idPurchase);
+      $("#paymentAmount").val(payment.paymentAmount);
+      $("#paymentDate").val(payment.paymentDate);
+      $("#status").val(payment.status);
+      $("#createPaymentButton").text("Editar").off("click").on("click", function() {
+        // Lógica para editar el elemento (puedes hacer una solicitud AJAX al servidor)
+        alert("Editar elemento con ID: " + payment.id);
+        // Cerrar el modal después de la edición
+        $("#paymentModal").modal("hide");
+      });
+
+      // Abrir el modal de creación/editación
+      $("#paymentModal").modal("show");
+    });
+
+    // Botón de Eliminar
+    var deleteButton = document.createElement("button");
+    deleteButton.textContent = "Eliminar";
+    deleteButton.className = "btn btn-danger btn-sm float-end";
+    deleteButton.addEventListener("click", function() {
+      if (confirm("¿Estás seguro de que quieres eliminar este elemento?")) {
+        // Lógica para eliminar el elemento (puedes hacer una solicitud AJAX al servidor)
+        alert("Eliminar elemento con ID: " + payment.id);
+        // También puedes remover el elemento de la lista visualmente
+        paymentList.removeChild(listItem);
+      }
+    });
+
+        listItem.appendChild(editButton);
+        listItem.appendChild(deleteButton);
         paymentList.appendChild(listItem);
       });
     },
@@ -136,7 +170,6 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
-// Resto del código...
 
 
 </script>

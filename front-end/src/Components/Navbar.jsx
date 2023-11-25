@@ -24,17 +24,17 @@ function Navbar() {
         </div>
         <div className='hidden sm:flex'>
           <ul className='flex gap-8 mr-16 text-[18px]'>
-            <Link to='/' onClick={handleLinkClick}>
-              <li className='text-pink-700 transition border-b-2 border-white hover:text-pink-300 hover:border-pink-400'>Home</li>
+          <Link to='/' onClick={handleLinkClick}>
+              <li className='text-pink-700 transition border-b-2 border-pink-300 hover:text-pink-300 hover:border-pink-400'>Home</li>
             </Link>
             <Link to='/Supplier' onClick={handleLinkClick}>
-              <li className='text-pink-700 transition border-b-2 border-white hover:text-pink-300 hover:border-pink-400'>Supplier</li>
+              <li className='text-pink-700 transition border-b-2 border-pink-300 hover:text-pink-300 hover:border-pink-400'>Supplier</li>
             </Link>
             <Link to='/Purchase' onClick={handleLinkClick}>
-              <li className='text-pink-700 transition border-b-2 border-white hover:text-pink-300 hover:border-pink-400'>Purchase</li>
+              <li className='text-pink-700 transition border-b-2 border-pink-300 hover:text-pink-300 hover:border-pink-400'>Purchase</li>
             </Link>
             <Link to='/Payment' onClick={handleLinkClick}>
-              <li className='text-pink-700 transition border-b-2 border-white hover:text-pink-300 hover:border-pink-400'>Payment</li>
+              <li className='text-pink-700 transition border-b-2 border-pink-300 hover:text-pink-300 hover:border-pink-400'>Payment</li>
             </Link>
           </ul>
         </div>
