@@ -64,17 +64,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 
 // Delete a supplier
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    $data = json_decode(file_get_contents("php://input"));
-    $idSupplier = $data->idSupplier;
+    $idSupplier = $_GET['idSupplier'] ?? null;
 
-    $sql = "DELETE FROM supplier WHERE idSupplier = :idSupplier";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(":idSupplier", $idSupplier);
-
-    if ($stmt->execute()) {
-        echo json_encode(["message" => "Supplier deleted successfully"]);
+    if ($idSupplier !== null){
+        $sql = "DELETE FROM supplier WHERE idSupplier = :idSupplier";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(":idSupplier", $idSupplier);
+        
+        if ($stmt->execute()) {
+            echo json_encode(["message" => "Supplier deleted successfully"]);
+        } else {
+            echo json_encode(["message" => "Failed to delete supplier"]);
+        }    
     } else {
-        echo json_encode(["message" => "Failed to delete supplier"]);
+        echo json_encode(["message" => "Invalid request. Missing idSupplier parameter in the URL"]);
     }
 }
 ?>

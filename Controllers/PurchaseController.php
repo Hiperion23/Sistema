@@ -64,17 +64,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 
 // Delete a purchase
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    $data = json_decode(file_get_contents("php://input"));
-    $idPurchase = $data->idPurchase;
+    $idPurchase = $_GET['idPurchase'] ?? null;
 
-    $sql = "DELETE FROM purchase WHERE idPurchase = :idPurchase";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(":idPurchase", $idPurchase);
+    if ($idPurchase !==null){
+        $sql = "DELETE FROM purchase WHERE idPurchase = :idPurchase";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(":idPurchase", $idPurchase);    
 
-    if ($stmt->execute()) {
-        echo json_encode(["message" => "Purchase deleted successfully"]);
+        if ($stmt->execute()) {
+            echo json_encode(["message" => "Purchase deleted successfully"]);
+        } else {
+            echo json_encode(["message" => "Failed to delete purchase"]);
+        }    
     } else {
-        echo json_encode(["message" => "Failed to delete purchase"]);
+        echo json_encode(["message" => "Invalid request. Missing idPurchase parameter in the URL"]);
     }
+
 }
 ?>

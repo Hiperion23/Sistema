@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaTimes, FaBars } from 'react-icons/fa';
+import Header from './Header';
 
 
 function Navbar() {
   const [click, setClick] = React.useState(false);
+  
 
   const handleClick = () => {
     setClick(!click);

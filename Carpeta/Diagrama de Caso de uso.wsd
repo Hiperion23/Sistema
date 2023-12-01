@@ -1,0 +1,30 @@
+@startuml
+left to right direction
+
+actor "User" as User
+
+rectangle "Supplier Billing System" {
+  usecase "Manage Suppliers" as ManageSuppliers
+  usecase "Manage Purchases" as ManagePurchases
+  usecase "Manage Payments" as ManagePayments
+
+  User --> ManageSuppliers
+  User --> ManagePurchases
+  User --> ManagePayments
+
+  usecase "View Supplier Details" as ViewSupplierDetails
+  usecase "Create Purchase" as CreatePurchase
+  usecase "Record Payment" as RecordPayment
+
+  ManageSuppliers --> ViewSupplierDetails
+  ManagePurchases --> CreatePurchase
+  ManagePayments --> RecordPayment
+
+  usecase "Generate Reports" as GenerateReports
+  usecase "Manage Installment Payments" as ManageInstallmentPayments
+
+  ManagePayments --> GenerateReports
+  ManageInstallmentPayments --> RecordPayment
+}
+
+@enduml

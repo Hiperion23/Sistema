@@ -36,6 +36,34 @@ function Purchase() {
       status: '',
     });
   };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setPurchaseData({ ...purchaseData, [name]: value });
+  };
+
+  const handleCreatePurchase = async () => {
+    try {
+      const response = await fetch('http://localhost/sistema/Controllers/PurchaseController.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(purchaseData),
+      });
+
+      if (response.ok) {
+        console.log('Purchase created successfully');
+        handleClose();
+        fetchPurchases();
+      } else {
+        console.error('Error creating purchase');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+
 
   const handleUpdatePurchase = (id) => {
     const selectedPurchase = purchases.find((purchase) => purchase.idPurchase === id);
@@ -49,7 +77,7 @@ function Purchase() {
 
   const handleDeletePurchase = async (id) => {
     try {
-      const response = await fetch(`http://localhost/sistema/Controllers/PurchaseController.php?id=${id}`, {
+      const response = await fetch(`http://localhost/sistema/Controllers/PurchaseController.php?idPurchase=${id}`, {
         method: 'DELETE',
       });
 
@@ -83,10 +111,15 @@ function Purchase() {
   }, []);
 
   const handleSaveChanges = async () => {
-    if (editingPurchase) {
       try {
-        const response = await fetch(`http://localhost/sistema/Controllers/PurchaseController.php?id=${editingPurchase.idPurchase}`, {
-          method: 'PUT',
+        const url = editingPurchase 
+        ? `http://localhost/sistema/Controllers/PurchaseController.php?id=${editingPurchase.idPurchase}`
+        : 'http://localhost/sistema/Controllers/PurchaseController.php';
+
+        const method = editingPurchase ?  'PUT' : 'POST';
+
+        const response = await fetch(url,{
+          method,
           headers: {
             'Content-Type': 'application/json',
           },
@@ -94,16 +127,15 @@ function Purchase() {
         });
 
         if (response.ok) {
-          console.log('Purchase updated successfully');
+          console.log(`Purchase ${editingPurchase ? 'updated' : 'created'} successfully`);
           handleClose();
           fetchPurchases();
         } else {
-          console.error('Error updating purchase');
+          console.error(`Error ${editingPurchase ? 'updating' : 'creating'} purchase`);
         }
       } catch (error) {
         console.error('Error:', error);
       }
-    }
   };
 
   return (
@@ -121,6 +153,8 @@ function Purchase() {
       {showForm && (
         <PurchaseForm
           handleClose={handleClose}
+          handleCreatePurchase={handleCreatePurchase}
+          handleInputChange={handleInputChange}
           fetchPurchases={fetchPurchases}
           purchaseData={purchaseData}
           setPurchaseData={setPurchaseData}

@@ -76,7 +76,7 @@ function Supplier() {
 
   const handleDeleteSupplier = async (id) => {
     try {
-      const response = await fetch(`http://localhost/sistema/Controllers/SupplierController.php?id=${id}`, {
+      const response = await fetch(`http://localhost/sistema/Controllers/SupplierController.php?idSupplier=${id}`, {
         method: 'DELETE',
       });
 

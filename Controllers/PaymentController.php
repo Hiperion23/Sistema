@@ -65,10 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 
 // Delete a payment
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    // Obtener el idPayment de la URL
     $idPayment = $_GET['idPayment'] ?? null;
 
-    // Verificar si el idPayment es válido
     if ($idPayment !== null) {
         $sql = "DELETE FROM payment WHERE idPayment = :idPayment";
         $stmt = $conn->prepare($sql);

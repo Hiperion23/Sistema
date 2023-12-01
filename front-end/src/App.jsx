@@ -8,18 +8,21 @@ import Supplier from './Components/pages/Supplier/Supplier'
 
 function Home() {
   return (
-    <div className='flex bg-green-600 text-pink-900 text-4xl font-serif' style={{
-      backgroundImage: 'url("https://www.xtrafondos.com/descargar.php?id=5492&resolucion=2560x1440")',
-      backgroundSize: 'cover',
-      height: '85vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
-      Welcome to the presentation of Supplier Billing System! 
-      In a continuous effort to enhance and optimize our operations, 
-      we have developed this tool that will streamline and expedite the billing process, 
-      thereby strengthening our relationships with suppliers.
+    <div
+      className="flex text-pink-900 text-lg md:text-2xl lg:text-3xl font-serif items-center justify-center"
+      style={{
+        backgroundImage: 'url("https://www.xtrafondos.com/descargar.php?id=5492&resolucion=2560x1440")',
+        backgroundSize: 'cover',
+        height: '89vh',
+      }}
+    >
+      <div className="bg-black bg-opacity-50 p-8 max-w-2xl text-center">
+        <h1 className="text-5xl font-bold mb-4">Welcome to the Supplier Billing System</h1>
+        <p className="text-lg">
+          In a continuous effort to enhance and optimize our operations, we have developed this tool that will streamline
+          and expedite the billing process, thereby strengthening our relationships with suppliers.
+        </p>
+      </div>
     </div>
   );
 }

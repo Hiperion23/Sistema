@@ -1,0 +1,72 @@
+@startuml
+entity "Supplier" as supplier {
+  + idSupplier : INT
+  --
+  name : VARCHAR(255)
+  address : VARCHAR(255)
+  phone : VARCHAR(255)
+  email : VARCHAR(255)
+}
+
+entity "Purchase" as purchase {
+  + idPurchase : INT
+  --
+  idSupplier : INT
+  purchaseDate : DATE
+  totalAmount : DECIMAL(10,2)
+  status : VARCHAR(255)
+}
+
+entity "Payment" as payment {
+  + idPayment : INT
+  --
+  idPurchase : INT
+  paymentAmount : DECIMAL(10,2)
+  paymentDate : DATETIME
+  status : VARCHAR(255)
+}
+
+entity "InstallmentPurchase" as installmentPurchase {
+  + idInstallmentPurchase : INT
+  --
+  idPurchase : INT
+  installmentNumber : INT
+  installmentAmount : DECIMAL(10,2)
+  dueDate : DATE
+  status : VARCHAR(255)
+}
+
+entity "SupplierTransaction" as supplierTransaction {
+  + idSupplierTransaction : INT
+  --
+  idPurchase : INT
+  transactionDate : DATE
+  amount : DECIMAL(10,2)
+  status : VARCHAR(255)
+}
+
+entity "PaymentDetail" as paymentDetail {
+  + idPaymentDetail : INT
+  --
+  idPayment : INT
+  document : VARCHAR(255)
+  documentNumber : VARCHAR(255)
+  paymentAmount : DECIMAL(10,2)
+  paymentDate : DATETIME
+}
+
+entity "PaymentTypeDetail" as paymentTypeDetail {
+  + idPaymentTypeDetail : INT
+  --
+  idPaymentDetail : INT
+  idPaymentType : INT
+  amount : DECIMAL(10,2)
+}
+
+supplier ||--o{ purchase : FK
+purchase ||--o{ payment : FK
+purchase ||--o{ installmentPurchase : FK
+purchase ||--o{ supplierTransaction : FK
+payment ||--o{ paymentDetail : FK
+paymentDetail ||--o{ paymentTypeDetail : FK
+@enduml

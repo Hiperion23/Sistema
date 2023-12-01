@@ -1,0 +1,19 @@
+@startuml
+title Diagrama de Secuencia de Transacciones de Proveedores
+
+actor Proveedor
+actor Compra
+actor Pago
+actor Compra_a_plazos
+actor Transaccion_del_proveedor
+actor Detalle_de_pago
+actor Detalle_de_tipo_de_pago
+
+Proveedor -> Compra : Realiza una compra
+Compra -> Pago : Realiza un pago
+Compra -> Compra_a_plazos : Realiza una compra a plazos
+Compra -> Transaccion_del_proveedor : Realiza una transacción
+Pago -> Detalle_de_pago : Proporciona detalles de pago
+Detalle_de_pago -> Detalle_de_tipo_de_pago : Proporciona detalles del tipo de pago
+
+@enduml
